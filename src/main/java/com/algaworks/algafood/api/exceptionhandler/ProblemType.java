@@ -14,10 +14,10 @@ public enum ProblemType {
 	ERRO_NEGOCIO("/erro-negocio", "Violação de regra de negócio");
 	
 	private String title;
-	private String path;
+	private String uri;
 	
 	ProblemType(String path, String title){
-		this.path = "https://algafood.com.br/" + path;
+		this.uri = "https://algafood.com.br/" + path;
 		this.title = title;
 	}
 
