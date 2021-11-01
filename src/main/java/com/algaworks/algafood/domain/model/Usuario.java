@@ -1,6 +1,7 @@
 package com.algaworks.algafood.domain.model;
 
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -34,6 +35,6 @@ public class Usuario {
 	
 	@CreationTimestamp
 	@Column(nullable = false, columnDefinition = "datetime")
-	private LocalDateTime dataCadastro;
+	private OffsetDateTime dataCadastro;
 
 }
