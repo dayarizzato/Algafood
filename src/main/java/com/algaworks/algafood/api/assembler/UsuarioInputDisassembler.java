@@ -1,5 +1,6 @@
 package com.algaworks.algafood.api.assembler;
 
+import com.algaworks.algafood.api.model.input.UsuarioComSenhaInput;
 import com.algaworks.algafood.api.model.input.UsuarioInput;
 import com.algaworks.algafood.domain.model.Usuario;
 import org.modelmapper.ModelMapper;
@@ -12,12 +13,11 @@ public class UsuarioInputDisassembler {
     @Autowired
     private ModelMapper modelMapper;
 
-    private Usuario toDomainObject(UsuarioInput usuarioInput){
-        return modelMapper.map(usuarioInput, Usuario.class);
-    }
-
     public void copyToDomainObject(UsuarioInput usuarioInput, Usuario usuario){
         modelMapper.map(usuarioInput, usuario);
     }
 
+    public Usuario ToDomainObject(UsuarioComSenhaInput usuarioInput) {
+        return modelMapper.map(usuarioInput, Usuario.class);
+    }
 }

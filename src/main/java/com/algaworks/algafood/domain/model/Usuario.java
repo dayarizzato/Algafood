@@ -4,7 +4,9 @@ import java.security.PublicKey;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.*;
 
@@ -38,8 +40,8 @@ public class Usuario {
 
     @ManyToMany
     @JoinTable(name = "usuario_grupo", joinColumns = @JoinColumn(name = "usuario_id"),
-            inverseJoinColumns = @JoinColumn(name = "gruppo_id"))
-    private List<Grupo> grupos = new ArrayList<>();
+            inverseJoinColumns = @JoinColumn(name = "grupo_id"))
+    private Set<Grupo> grupos = new HashSet<>();
 
     public boolean senhaCoincidemCom(String senha) {
         return getSenha().equals(senha);
@@ -47,6 +49,14 @@ public class Usuario {
 
     public boolean senhaNãoCoincideCom(String senha) {
         return !senhaCoincidemCom(senha);
+    }
+
+    public boolean removerGrupo(Grupo grupo){
+        return getGrupos().remove(grupo);
+    }
+
+    public boolean adicionarGrupo(Grupo grupo){
+        return getGrupos().add(grupo);
     }
 
 }
