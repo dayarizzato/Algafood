@@ -31,4 +31,4 @@ public class EnderecoInput {
         private CidadeIdInput cidade;
 
     }
-}
+

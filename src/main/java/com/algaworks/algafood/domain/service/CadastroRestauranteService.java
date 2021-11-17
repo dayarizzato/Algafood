@@ -40,6 +40,7 @@ public class CadastroRestauranteService {
 		restaurante.getEndereco().setCidade(cidade);
 
 		return restauranteRepository.save(restaurante);
+
 	}
 
 	@Transactional
