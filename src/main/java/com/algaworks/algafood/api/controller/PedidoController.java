@@ -12,8 +12,12 @@ import com.algaworks.algafood.domain.model.Pedido;
 import com.algaworks.algafood.domain.model.Usuario;
 import com.algaworks.algafood.domain.repository.PedidoRepository;
 import com.algaworks.algafood.domain.service.EmissaoPedidoService;
+import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
+import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -30,7 +34,7 @@ public class PedidoController {
     private EmissaoPedidoService emissaoPedido;
 
     @Autowired
-    PedidoModelAssembler pedidoModelAssembler;
+    private PedidoModelAssembler pedidoModelAssembler;
 
     @Autowired
     private PedidoResumoModelAssembler pedidoResumoModelAssembler;
@@ -39,34 +43,35 @@ public class PedidoController {
     private PedidoInputDisassembler pedidoInputDisassembler;
 
     @GetMapping
-    public List<PedidoResumoModel> listar(){
+    public List<PedidoResumoModel> listar() {
         List<Pedido> todosPedidos = pedidoRepository.findAll();
 
         return pedidoResumoModelAssembler.toCollectionModel(todosPedidos);
     }
 
-    @GetMapping("/{codigoPedido}")
-    public PedidoModel buscar(@PathVariable String codigoPedido){
-        Pedido pedido = emissaoPedido.buscarOuFalhar(codigoPedido);
-
-        return pedidoModelAssembler.toModel(pedido);
-    }
-
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public PedidoModel adicionar(@Valid @RequestBody PedidoInput pedidoInput){
+    public PedidoModel adicionar(@Valid @RequestBody PedidoInput pedidoInput) {
         try {
             Pedido novoPedido = pedidoInputDisassembler.toDomainObject(pedidoInput);
 
-            //TODO pegar usuario autenticado
+            // TODO pegar usuário autenticado
             novoPedido.setCliente(new Usuario());
             novoPedido.getCliente().setId(1L);
 
             novoPedido = emissaoPedido.emitir(novoPedido);
 
             return pedidoModelAssembler.toModel(novoPedido);
-        }catch (EntidadeNaoEncontradaException e){
+        } catch (EntidadeNaoEncontradaException e) {
             throw new NegocioException(e.getMessage(), e);
         }
     }
+
+    @GetMapping("/{codigoPedido}")
+    public PedidoModel buscar(@PathVariable String codigoPedido) {
+        Pedido pedido = emissaoPedido.buscarOuFalhar(codigoPedido);
+
+        return pedidoModelAssembler.toModel(pedido);
+    }
+
 }
